@@ -21,8 +21,15 @@ jobs:
       - uses: leafo/gh-actions-luarocks@e65774a6386cb4f24e293dca7fc4ff89165b64c5 # v4
       - name: Validate the rockspec
         run: luarocks lint unirate-api-0.1.0-1.rockspec
-      - name: Install a JSON library (luarocks upload needs one)
-        run: luarocks install dkjson
+      - name: Install libs luarocks upload needs (JSON + in-process HTTPS)
+        # `luarocks upload` calls the luarocks.org API over HTTPS in-process, so
+        # it needs a JSON lib (dkjson) AND LuaSocket/LuaSec — without the latter
+        # the API GET fails as "failed downloading ... check_rockspec".
+        run: |
+          sudo apt-get update && sudo apt-get install -y libssl-dev
+          luarocks install dkjson
+          luarocks install luasocket
+          luarocks install luasec
       - name: Upload to luarocks.org
         env:
           LUAROCKS_API_KEY: ${{ secrets.LUAROCKS_API_KEY }}
