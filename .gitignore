@@ -1,0 +1,9 @@
+# LuaRocks build artifacts
+*.rock
+*.src.rock
+/lua_modules/
+/.luarocks/
+
+# Editor / OS
+*.swp
+.DS_Store

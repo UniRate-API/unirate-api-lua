@@ -1,0 +1,27 @@
+name: release
+
+# Publishes the rock to luarocks.org on a version tag.
+#
+# Requires the repo secret LUAROCKS_API_KEY (an API key from a luarocks.org
+# account: https://luarocks.org/settings/api-keys). Until it is set, this job
+# fails by design at the upload step — the first publish is gated on Rob
+# creating the account + key. LuaRocks has no OIDC/trusted-publishing flow.
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: leafo/gh-actions-lua@35bcb06abec04ec87df82e08caa84d545348536e # v10
+        with:
+          luaVersion: "5.4"
+      - uses: leafo/gh-actions-luarocks@e65774a6386cb4f24e293dca7fc4ff89165b64c5 # v4
+      - name: Validate the rockspec
+        run: luarocks lint unirate-api-0.1.0-1.rockspec
+      - name: Upload to luarocks.org
+        env:
+          LUAROCKS_API_KEY: ${{ secrets.LUAROCKS_API_KEY }}
+        run: luarocks upload unirate-api-0.1.0-1.rockspec --api-key="$LUAROCKS_API_KEY"

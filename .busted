@@ -1,0 +1,20 @@
+-- Busted configuration.
+--
+--   busted            -> mock suite only (live tests are excluded by tag)
+--   busted --run=live -> free-tier live tests (need UNIRATE_API_KEY)
+--
+-- `lpath` lets the specs `require("unirate")` from ./src without installing the
+-- rock first (mirrors the module layout in the rockspec's build.modules).
+return {
+  _all = {
+    lpath = "./src/?.lua;./src/?/init.lua",
+  },
+  default = {
+    ROOT = { "spec" },
+    ["exclude-tags"] = "live",
+  },
+  live = {
+    ROOT = { "spec" },
+    tags = "live",
+  },
+}
