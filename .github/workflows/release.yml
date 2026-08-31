@@ -21,6 +21,8 @@ jobs:
       - uses: leafo/gh-actions-luarocks@e65774a6386cb4f24e293dca7fc4ff89165b64c5 # v4
       - name: Validate the rockspec
         run: luarocks lint unirate-api-0.1.0-1.rockspec
+      - name: Install a JSON library (luarocks upload needs one)
+        run: luarocks install dkjson
       - name: Upload to luarocks.org
         env:
           LUAROCKS_API_KEY: ${{ secrets.LUAROCKS_API_KEY }}
