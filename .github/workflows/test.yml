@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        luaVersion: ["5.1", "5.3", "5.4", "luajit-2.1"]
+        luaVersion: ["5.1", "5.3", "5.4", "luajit-openresty"]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: leafo/gh-actions-lua@35bcb06abec04ec87df82e08caa84d545348536e # v10
